@@ -1,7 +1,65 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { Global } from "../style/global";
+import { Overlay, Container, Title, ContentWrapper } from "../style/AppStyles";
+import Navbar from "./Navbar";
+import MovieCard from "./MovieCard";
+import CardModal from "./CardModal";
 
-const App = () => (
-	<img src={logo} alt="Timescale" />
-)
+const App = () => {
+	const base = "https://api.themoviedb.org/3/";
+	const [movies, setMovies] = useState();
+	const [selectedMovie, setSelectedMovie] = useState(null);
+	const [searchInput, setSearchInput] = useState("");
+	//const [filteredMovies, setFilteredMovies] = useState(movies);
+
+	const getMovies = () => {
+		return fetch(`${base}movie/now_playing?api_key=7315ec59ea2264da1fa4f4eb8d647853&language=en-US&page=1`)
+			.then((response) => response.json())
+			.then((data) => {
+				setMovies(data.results);
+			})
+	}
+
+	useEffect(() => {
+    getMovies();
+  }, []);
+
+	useEffect(() => {
+    let filteredMovies = movies && movies.filter(movie => movie.title.includes(searchInput));
+		setMovies(filteredMovies);
+  }, [searchInput]);
+
+	const searchMovies = (e) => {
+		setSearchInput(e.target.value);
+	}
+
+	const openModal = (movie) => {
+		setSelectedMovie(movie);
+		console.log(selectedMovie)
+	}
+
+	const closeModal = () => {
+		setSelectedMovie(null);
+	}
+
+	return (
+		<>
+		{selectedMovie && <CardModal movie={selectedMovie} closeModal={closeModal}/>}
+		<ContentWrapper>
+			<Global />
+			<Navbar searchMovies={searchMovies} searchInput={searchInput}/>
+			<Title>Most Recent Movies</Title>
+			<Container>
+				{movies && movies.map(movie => {
+					return (
+						<MovieCard movie={movie} openModal={openModal}/>
+					)
+				})}
+			</Container>
+		</ContentWrapper>
+		</>
+	)
+}
 
 export default App;
