@@ -13,7 +13,7 @@ const CardModal = ({ movie, closeModal }) => {
 }
 
   useEffect(() => {
-    document.addEventListener("mousedown",handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return() => {
        document.removeEventListener("mousedown", handleClickOutside);
     };

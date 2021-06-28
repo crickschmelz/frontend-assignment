@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import { Global } from "../style/global";
 import { Overlay, Container, Title, ContentWrapper } from "../style/AppStyles";
@@ -11,7 +11,7 @@ const App = () => {
 	const [movies, setMovies] = useState();
 	const [selectedMovie, setSelectedMovie] = useState(null);
 	const [searchInput, setSearchInput] = useState("");
-	//const [filteredMovies, setFilteredMovies] = useState(movies);
+	const [filteredMovies, setFilteredMovies] = useState(movies);
 
 	const getMovies = () => {
 		return fetch(`${base}movie/now_playing?api_key=7315ec59ea2264da1fa4f4eb8d647853&language=en-US&page=1`)
@@ -19,6 +19,7 @@ const App = () => {
 			.then((data) => {
 				setMovies(data.results);
 			})
+			.catch((err) => console.log(err));
 	}
 
 	useEffect(() => {
@@ -26,20 +27,23 @@ const App = () => {
   }, []);
 
 	useEffect(() => {
-    let filteredMovies = movies && movies.filter(movie => movie.title.includes(searchInput));
-		setMovies(filteredMovies);
-  }, [searchInput]);
+		setFilteredMovies(movies && movies.filter((movie) =>
+			movie.title.toLowerCase().includes(searchInput.toLowerCase())
+		))
+	}, [searchInput, movies])
 
 	const searchMovies = (e) => {
 		setSearchInput(e.target.value);
 	}
 
 	const openModal = (movie) => {
+		console.log(movie)
 		setSelectedMovie(movie);
 		console.log(selectedMovie)
 	}
 
-	const closeModal = () => {
+	const closeModal = (e) => {
+		e.stopPropagation();
 		setSelectedMovie(null);
 	}
 
@@ -51,7 +55,7 @@ const App = () => {
 			<Navbar searchMovies={searchMovies} searchInput={searchInput}/>
 			<Title>Most Recent Movies</Title>
 			<Container>
-				{movies && movies.map(movie => {
+				{movies && filteredMovies.map(movie => {
 					return (
 						<MovieCard movie={movie} openModal={openModal}/>
 					)

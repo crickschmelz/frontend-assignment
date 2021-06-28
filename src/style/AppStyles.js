@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import px2vw from "../utils";
 
 export const ContentWrapper = styled.div`
   max-width: 1200px;
@@ -22,7 +21,6 @@ export const Container = styled.div`
   @media screen and (min-width: 1200px) {
     grid-template-columns: auto auto auto auto;
   }
-
 `
 export const Title = styled.h1`
   font-weight: 700;

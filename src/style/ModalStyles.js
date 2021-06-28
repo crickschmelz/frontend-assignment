@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import px2vw from "../utils";
 
 export const ModalContainer = styled.div`
   background: rgba(0,0,0,0.7);
