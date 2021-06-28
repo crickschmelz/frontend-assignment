@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const ModalContainer = styled.div`
   background: rgba(0,0,0,0.7);
-  position: absolute;
+  position: fixed;
   z-index: 5;
   height: 100%;
   width: 100%;

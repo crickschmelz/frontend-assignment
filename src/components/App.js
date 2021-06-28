@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Global } from "../style/global";
 import { Overlay, Container, Title, ContentWrapper } from "../style/AppStyles";
@@ -37,13 +37,10 @@ const App = () => {
 	}
 
 	const openModal = (movie) => {
-		console.log(movie)
 		setSelectedMovie(movie);
-		console.log(selectedMovie)
 	}
 
-	const closeModal = (e) => {
-		e.stopPropagation();
+	const closeModal = () => {
 		setSelectedMovie(null);
 	}
 
